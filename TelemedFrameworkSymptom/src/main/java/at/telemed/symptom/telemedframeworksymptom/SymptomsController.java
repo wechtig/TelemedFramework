@@ -34,9 +34,4 @@ public class SymptomsController {
 
        }
     }
-
-    @RequestMapping(value = "/test", method = RequestMethod.POST, consumes="application/json")
-    public void test(@RequestBody String text) {
-       String tex = text;
-    }
 }
