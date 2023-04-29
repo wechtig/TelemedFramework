@@ -1,0 +1,15 @@
+.symptom {
+    padding: 10px;
+    background-color: #adc7bb;
+    margin-bottom: 5px;
+    margin-right: 20px;
+}
+
+input[type=checkbox] {
+    transform: scale(1.5);
+}
+
+#symptoms {
+    overflow: scroll;
+    height: 700px;
+}
