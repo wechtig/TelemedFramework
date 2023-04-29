@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+  <title>Telemed Communication</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous" />  <!--Bootstrap only for styling-->
+   <script
+          src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script
+          src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <!--Bootstrap only for styling-->
+</head>
+<style>
+  .container {
+    background: rgb(148, 144, 144);
+    margin: 50px auto;
+    max-width: 80%;
+    text-align: center;
+  }
+
+  button {
+    margin: 1em;
+  }
+
+</style>
+  <body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="http://localhost:8081/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link logintext"
+             th:href="@{http://localhost:8080/}">Videocall und Chat</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+      </ul>
+      <a class="nav-link"
+         th:text="${username}"></a>
+      <form action="http://localhost:8081/logout"
+            method="post">
+        <button type="submit" class="btn btn-primary"
+                value="Sign Out">Sign Out</button>
+      </form>
+    </div>
+  </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3" style="text-align: left">
+          <!--WebRTC related code-->
+          <button type="button" class="btn btn-primary" onclick='createOffer()'>Create
+            Offer</button>
+          <input id="messageInput" type="text" class="form-control"
+                 placeholder="message" style="margin-left: 15px">
+          <button type="button" class="btn btn-primary" onclick='sendMessage()'>SEND</button>
+          <script src="client.js"></script>
+          <!--WebRTC related code-->    </div>
+        <div class="col-md-3">
+          <video style="width: 1500px; height: 750px" id="videostream" autoplay="true"></video>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

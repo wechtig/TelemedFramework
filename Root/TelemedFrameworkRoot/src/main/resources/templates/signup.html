@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous" />
+    <title>Registrierung</title>
+</head>
+<body>
+    <h1 style="margin-left: auto; margin-right: auto; width: 100px; margin-top: 150px">Registrierung</h1>
+    <form style="margin-left: auto; margin-right: auto; width: 100px; margin-top: 20px"th:action="@{/save}" th:object="${user}" method="POST">
+        <div>
+            <label>Username</label>
+            <input th:field="*{username}"/>
+        </div>
+        <div>
+            <label th:text="Vorname">first</label>
+            <input th:field="*{firstName}"/>
+        </div>
+        <div>
+            <label th:text="Nachname">last</label>
+            <input th:field="*{lastName}"/>
+        </div>
+        <div>
+            <label th:text="Email">email</label>
+            <input type="email" th:field="*{email}"/>
+        </div>
+        <div>
+            <label th:text="Passwort">password</label>
+            <input type="password" th:field="*{password}"/>
+        </div>
+        <button type="submit" th:text="Speichern">submit</button>
+    </form>
+
+</body>
+</html>
