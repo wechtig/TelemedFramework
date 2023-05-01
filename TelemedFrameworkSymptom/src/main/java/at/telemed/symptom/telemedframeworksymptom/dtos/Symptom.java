@@ -7,14 +7,24 @@ import java.util.UUID;
 public class Symptom {
     private String symptom;
     private String description;
+    private boolean active;
 
-    public Symptom(String symptom, String description) {
+    public Symptom(String symptom, String description, boolean active) {
         this.symptom = symptom;
         this.description = description;
+        this.active = active;
     }
 
     public Symptom() {
 
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getSymptom() {

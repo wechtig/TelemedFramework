@@ -17,9 +17,11 @@ public class SymptomEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private UUID uid;
 
-    private UUID userId;
+    private String username;
 
     private String symptom;
+
+    private String description;
 
     public UUID getUid() {
         return uid;
@@ -29,12 +31,20 @@ public class SymptomEntity {
         this.uid = uid;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getSymptom() {

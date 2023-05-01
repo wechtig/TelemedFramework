@@ -18,8 +18,10 @@ public class SymptomsController {
     private SymptomService symptomService;
 
     @GetMapping("/symptoms-list")
-    public List<String> getSymptoms() {
-        return symptomService.readSymptoms();
+    public List<Symptom> getSymptoms() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return symptomService.readSymptoms(authentication.getName());
     }
 
     @GetMapping("/current")
@@ -30,8 +32,10 @@ public class SymptomsController {
 
     @PostMapping("/symptom-save")
     public void processForm(@RequestBody List<Symptom> symptoms) {
-       for(var symptom : symptoms) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-       }
+        if(authentication.isAuthenticated()) {
+            symptomService.saveSyptomList(symptoms, authentication.getName());
+        }
     }
 }

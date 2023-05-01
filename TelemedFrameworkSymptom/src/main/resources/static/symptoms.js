@@ -6,7 +6,21 @@ function initSymptoms() {
             let symptomDivs = '';
             for (var i = 0; i < data.length; i++) {
                 var id = "symptom"+i;
-                symptomDivs += "<div id='"+id+"' class='symptom'><h4>"+data[i]+"</h4><input type='checkbox'></div>";
+
+                if(data[i].active) {
+                    symptomDivs += "<div id='"+id+"' class='symptom'>" +
+                        "<h4>"+data[i].symptom+"</h4>" +
+                        "<input class='activeCheckbox' type='checkbox' checked>" +
+                        "<l>Zusatzinformationen:</l> <input class='descriptionText' type='text' value='"+data[i].description+"'>" +
+                        "</div>";
+                } else {
+                    symptomDivs += "<div id='"+id+"' class='symptom'>" +
+                        "<h4>"+data[i].symptom+"</h4>" +
+                        "<input class='activeCheckbox' type='checkbox'>" +
+                        "</l>Zusatzinformationen:</l> <input class='descriptionText' type='text'>" +
+                        "</div>"
+                }
+
             }
             document.getElementById("symptoms").innerHTML = symptomDivs;
 
@@ -23,7 +37,12 @@ function getCurrentName() {
 }
 
 function addSymptom() {
-    var symptomDivs = "<div class='symptom'><input type='text'><p></p><input checked='checked' type='checkbox'></div>";
+    var symptomDivs = "" +
+        "<div class='symptom'>" +
+        "<h4>Weitere Symptome</h4>" +
+        "<input class='descriptionText' type='text'><p></p>" +
+        "<input class='activeCheckbox' checked='checked' type='checkbox'>" +
+        "</div>";
     document.getElementById("symptoms").innerHTML += symptomDivs;
 }
 
@@ -32,33 +51,36 @@ function save() {
     var symptomsListDiv = symptomDiv.getElementsByTagName("div");
     var activeSymptoms = [];
 
-    for(var i = 0; i < symptomsListDiv.length; i++) {
+    for (var i = 0; i < symptomsListDiv.length; i++) {
         var symptom = symptomsListDiv[i];
         var text = symptom.getElementsByTagName("h4")[0].innerText;
-        var checked = symptom.getElementsByTagName("input")[0].checked;
+        var checked = symptom.getElementsByClassName("activeCheckbox")[0].checked;
+        var description = symptom.getElementsByClassName("descriptionText")[0].value;
 
-        if (checked) {
-            var element = {
-                "symptom": text,
-                "description": "lol"
-            }
-            activeSymptoms.push(element);
+        console.log("desc : ", description);
+
+        var element = {
+            "symptom": text,
+            "description": description,
+            "active": checked
         }
-
+        activeSymptoms.push(element);
     }
 
-    if(activeSymptoms.length > 0) {
+    if (activeSymptoms.length > 0) {
         console.log("token: ", getCookie('XSRF-TOKEN'));
         fetch('http://localhost:8082/api/symptom-save', {
             method: 'POST',
             headers: {
-                    'Content-Type': 'application/json',
-                    'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
             },
             body: JSON.stringify(activeSymptoms)
         })
             .then(response => {
                 console.log(response);
+                location.reload();
+
             })
             .catch(error => {
                 console.error(error);

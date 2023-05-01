@@ -13,3 +13,12 @@ input[type=checkbox] {
     overflow: scroll;
     height: 700px;
 }
+
+.descriptionText {
+    margin-left: 5px;
+    width: 400px;
+}
+
+l {
+    margin-left: 5px;
+}
