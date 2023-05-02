@@ -3,7 +3,6 @@ var conn = new WebSocket('ws://localhost:8081/socket');
 var username = "";
 var toUsername = "";
 conn.onopen = function() {
-    console.log("Connected to the signaling server");
     initialize();
 };
 
@@ -14,7 +13,6 @@ function getCurrentName() {
 }
 
 conn.onmessage = function(msg) {
-    console.log("Got message", msg.data);
     var content = JSON.parse(msg.data);
     var data = content.data;
     switch (content.event) {
@@ -50,10 +48,6 @@ function initialize() {
     });
 
     toUsername = document.getElementById("usernameInput").value;
-    console.log("to ", toUsername)
-    console.log("to1 ", document.getElementById("usernameInput"))
-    console.log("to2 ", document.getElementById("usernameInput").innerText)
-
     var configuration = null;
 
     peerConnection = new RTCPeerConnection(configuration);
@@ -75,7 +69,7 @@ function initialize() {
     });
 
     dataChannel.onerror = function(error) {
-        console.log("Error occured on datachannel:", error);
+        console.log("Error:", error);
     };
 
     // when we receive a message from the other peer, printing it on the console
@@ -84,7 +78,7 @@ function initialize() {
     };
 
     dataChannel.onclose = function() {
-        console.log("data channel is closed");
+        console.log("closed");
     };
 
     peerConnection.ondatachannel = function (event) {
@@ -111,7 +105,6 @@ function createOffer() {
         video: true,audio : true
     };
     peerConnection.onaddstream = function(event) {
-        console.log("stream start");
         var videoElement = document.getElementById("videostream")
         videoElement.srcObject = event.stream;
     };
@@ -177,21 +170,13 @@ function handleCandidate(candidate) {
 
 function handleAnswer(answer) {
     peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-    console.log("connection established successfully!!");
     peerConnection.onaddstream = function(event) {
-        console.log("stream start");
         var videoElement = document.getElementById("videostream")
         videoElement.srcObject = event.stream;
     };
 
     navigator.mediaDevices.getUserMedia(constraints).
     then(function(stream) {
-        console.log("stream:", stream);
         peerConnection.addStream(stream); })
         .catch(function(err) { /* handle the error */ });
 };
-
-function sendMessage() {
-    dataChannel.send(input.value);
-    input.value = "";
-}

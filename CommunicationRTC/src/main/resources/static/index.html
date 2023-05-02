@@ -13,7 +13,6 @@
           src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script
           src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <!--Bootstrap only for styling-->
 </head>
 <style>
   .container {
@@ -51,19 +50,17 @@
       </form>
     </div>
   </nav>
-    <div class="container">
+  <h1 style="padding-left: 30px; padding-top: 10px">Videokonferenz</h1>
+
+  <div class="container">
       <div class="row">
-        <div class="col-md-3" style="text-align: left">
-          <!--WebRTC related code-->
-          <button type="button" class="btn btn-primary" onclick='createOffer()'>Create
-            Offer</button>
-          <input id="messageInput" type="text" class="form-control"
-                 placeholder="message" style="margin-left: 15px">
-          <input id="usernameInput" type="text" class="form-control"
+        <div class="col-md-3" style="text-align: left; margin-top: 10px">
+          <p>Geben Sie den Benutzernamen ihres Arztes/Patienten an um eine Videokonferenz starten zu k&ouml;nnen!</p><input id="usernameInput" type="text" class="form-control"
                  placeholder="call username" style="margin-left: 15px">
-          <button type="button" class="btn btn-primary" onclick='sendMessage()'>SEND</button>
+          <button type="button" class="btn btn-primary" onclick='createOffer()'>Anrufen</button>
+
           <script src="client.js"></script>
-          <!--WebRTC related code-->    </div>
+        </div>
         <div class="col-md-3">
           <video style="width: 1500px; height: 750px" id="videostream" autoplay="true"></video>
         </div>
