@@ -1,10 +1,17 @@
 //connecting to our signaling server
-var conn = new WebSocket('ws://localhost:8080/socket');
-
+var conn = new WebSocket('ws://localhost:8081/socket');
+var username = "";
+var toUsername = "";
 conn.onopen = function() {
     console.log("Connected to the signaling server");
     initialize();
 };
+
+function getCurrentName() {
+    var url = "http://localhost:8081/api/current"
+    return fetch(url)
+        .then(response => response.text());
+}
 
 conn.onmessage = function(msg) {
     console.log("Got message", msg.data);
@@ -36,6 +43,17 @@ var dataChannel;
 var input = document.getElementById("messageInput");
 
 function initialize() {
+    getCurrentName().then(name => {
+        username = name;
+        document.getElementById("currentUser").innerText = username;
+        console.log(username)
+    });
+
+    toUsername = document.getElementById("usernameInput").value;
+    console.log("to ", toUsername)
+    console.log("to1 ", document.getElementById("usernameInput"))
+    console.log("to2 ", document.getElementById("usernameInput").innerText)
+
     var configuration = null;
 
     peerConnection = new RTCPeerConnection(configuration);
@@ -44,6 +62,7 @@ function initialize() {
     peerConnection.onicecandidate = function(event) {
         if (event.candidate) {
             send({
+                name: username+":"+document.getElementById("usernameInput").value,
                 event : "candidate",
                 data : event.candidate
             });
@@ -75,10 +94,12 @@ function initialize() {
 }
 
 function createOffer() {
+    var toUser = document.getElementById("usernameInput").value;
     peerConnection.createOffer(function(offer) {
         send({
-            event : "offer",
-            data : offer
+            name: username+":"+toUser,
+            data : offer,
+            type: "offer",
         });
         console.log("offeR: ", offer);
         peerConnection.setLocalDescription(offer);
@@ -101,16 +122,17 @@ function createOffer() {
         peerConnection.addStream(stream); })
         .catch(function(err) { /* handle the error */ });
 
-
 }
 
 function handleOffer(offer) {
     peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+    var toUser = document.getElementById("usernameInput").value;
 
     // create and send an answer to an offer
     peerConnection.createAnswer(function(answer) {
         peerConnection.setLocalDescription(answer);
         send({
+            name: username+":"+toUser,
             event : "answer",
             data : answer
         });
@@ -118,18 +140,58 @@ function handleOffer(offer) {
         alert("Error creating an answer");
     });
 
+    peerConnection.onaddstream = function(event) {
+        console.log("stream start");
+        var videoElement = document.getElementById("videostream")
+        videoElement.srcObject = event.stream;
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints).
+    then(function(stream) {
+        console.log("stream:", stream);
+        peerConnection.addStream(stream); })
+        .catch(function(err) { /* handle the error */ });
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+            const videoElement = document.getElementById('videostream');
+            videoElement.srcObject = stream;
+            videoElement.play();
+        })
+        .catch((error) => {
+            console.error('Error accessing media devices.', error);
+        });
 };
 
 function handleCandidate(candidate) {
     peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+            const videoElement = document.getElementById('videostream');
+            videoElement.srcObject = stream;
+            videoElement.play();
+        })
+        .catch((error) => {
+            console.error('Error accessing media devices.', error);
+        });
 };
 
 function handleAnswer(answer) {
     peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
     console.log("connection established successfully!!");
+    peerConnection.onaddstream = function(event) {
+        console.log("stream start");
+        var videoElement = document.getElementById("videostream")
+        videoElement.srcObject = event.stream;
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints).
+    then(function(stream) {
+        console.log("stream:", stream);
+        peerConnection.addStream(stream); })
+        .catch(function(err) { /* handle the error */ });
 };
 
 function sendMessage() {
-    dataChannel.send(input.value + "tesst");
+    dataChannel.send(input.value);
     input.value = "";
 }
