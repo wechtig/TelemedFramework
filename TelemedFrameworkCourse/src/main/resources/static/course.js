@@ -12,6 +12,10 @@ function getCurrentRole() {
     fetch(url)
         .then(response => response.text())
         .then(data => {
+            if(data == "PATIENT") {
+
+            }
+
         })
 }
 

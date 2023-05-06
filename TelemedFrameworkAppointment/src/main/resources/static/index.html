@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+    <head>
+        <title>Telemed Root</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" />
+        <link rel="stylesheet"
+              href="/style.css" />
+    </head>
+    <body onload="javascript:getCurrentName(); getCurrentRole()">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link logintext"
+                           th:href="@{http://localhost:8086/}">Videocall und Chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+                <h6 class="nav-link" href="#" id="currentUser"></h6>
+                <form th:action="@{/logout}"
+                      method="post">
+                    <button type="submit" class="btn btn-primary"
+                            value="Sign Out">Sign Out</button>
+                </form>
+            </div>
+        </nav>
+
+        <div id="ownAppointments" class="own-input"></div>
+        <div class="own-input">
+            <div>
+                <h2>Neue Termine</h2>
+            </div>
+            <div class="input-group mb-3" id="nameDiv">
+                Bitte der Name des Patienten (Nachname oder Benutzername)
+                <input id="patienten-name">
+            </div>
+            <div class="input-group mb-3">
+                Ort (Tragen Sie bitte die Adresse der Arztpraxis f&uuml;r einen Vorort-Termin ein, oder ONLINE f&uuml;r einen Online-Termin):
+                <input id="ort">
+            </div>
+            <div class="input-group mb-3">
+                Bitte eine kurze Beschreibung f&uuml; den Grund des Arzttermins
+                <input id="beschreibung">
+            </div>
+
+        </div>
+        <div class="container" style="margin-left: 70px">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="datetimepicker">Datum und Uhrzeit ausw&auml;hlen:</label>
+                        <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker"/>
+                            <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script type="text/javascript" src="appointment.js"></script>
+
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker').datetimepicker({
+                    format: 'YYYY-MM-DD HH:mm:ss',
+                    locale: 'de',
+                });
+            });
+        </script>
+        <button class="own-input btn btn-primary" id="btPatient" onclick="terminAnfragen()">Termin anfragen</button>
+        <button class="own-input btn btn-primary" id="btDoctor" onclick="terminAnfragen()">Termin festlegen</button>
+
+    </body>
+</html>
