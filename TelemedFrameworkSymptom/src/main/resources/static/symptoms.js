@@ -36,6 +36,48 @@ function getCurrentName() {
         })
 }
 
+function getCurrentRole() {
+    var url = "http://localhost:8082/api/current-role"
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            if(data == "PATIENT") {
+                document.getElementById("doctorDiv").style.visibility = "hidden";
+                initSymptoms();
+            }
+
+            if(data == "DOCTOR") {
+                console.log("hier");
+                document.getElementById("symptoms").style.display = "none";
+                initUsernames();
+            }
+
+        })
+}
+
+function initUsernames() {
+    var url = "http://localhost:8082/api/usernames"
+    fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+            let usernames = "<select id='usernameSelectBox' onChange='getSymptomsByUsername()'>";
+            for (var i = 0; i < data.length; i++) {
+                let username = data[i];
+                usernames += '<option>' + username + '</option>';
+            }
+            usernames += "</select>"
+            console.log(data);
+            document.getElementById("usernameDiv").innerHTML = usernames;
+        })
+}
+
+function getSymptomsByUsername() {
+    var selectBox = document.getElementById("usernameSelectBox");
+    var selectedText = selectBox.options[selectBox.selectedIndex].text;
+    console.log(selectedText);
+}
+
 function addSymptom() {
     var symptomDivs = "" +
         "<div class='symptom'>" +

@@ -14,7 +14,7 @@
   <script type="text/javascript" src="symptoms.js"></script>
 </head>
 
-<body onload="javascript:getCurrentName(); initSymptoms()">
+<body onload="javascript:getCurrentName(); getCurrentRole()">
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -50,6 +50,10 @@
   <button onclick="addSymptom()">Symptom hinzuf&uuml;gen</button>
   <button onclick="save()">Speichern</button>
 
+</div>
+<div id="doctorDiv" layout:fragment="content" style="margin-top: 50px; margin-left: 20px">
+  <p>Patient ausw&auml;hlen um die Symptome sehen zu k&ouml;nnen</p>
+  <div id="usernameDiv"></div>
 </div>
 </body>
 </html>
