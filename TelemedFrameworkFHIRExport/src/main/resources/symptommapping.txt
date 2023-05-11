@@ -1,0 +1,14 @@
+Fieber/8310-5
+Kurzatmigkeit oder Atembeschwerden/62315008
+Brustschmerzen/29857009
+Kopfschmerzen/25064002
+Muskelschmerzen oder Körperschmerzen/102019007
+Müdigkeit/394659003
+Schwächegefühl/72092001
+Verlust des Geschmacks- oder Geruchssinns/44169009
+Übelkeit oder Erbrechen/422400008
+Durchfall/62315008
+Halsentzündung oder Halsschmerzen/267036007
+Laufende Nase oder Nasenverstopfung/36971009
+Augenentzündung oder Bindehautentzündung/233678006
+Hautausschlag oder Veränderungen an der Haut/271807003
