@@ -92,4 +92,19 @@ public class SymptomService {
             }
         }
     }
+
+    public List<Symptom> readSymptomsByUsername(String username) {
+        var entities = symptomRepository.findByUsername(username);
+        List<Symptom> symptoms = new ArrayList<>();
+
+        for(SymptomEntity symptomEntity : entities) {
+            Symptom symptomDto = new Symptom();
+            symptomDto.setSymptom(symptomEntity.getSymptom());
+            symptomDto.setDescription(symptomEntity.getDescription());
+            symptomDto.setActive(true);
+            symptoms.add(symptomDto);
+        }
+
+        return symptoms;
+    }
 }

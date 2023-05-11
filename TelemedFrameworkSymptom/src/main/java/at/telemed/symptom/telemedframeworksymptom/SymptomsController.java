@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,11 @@ public class SymptomsController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         return symptomService.readSymptoms(authentication.getName());
+    }
+
+    @GetMapping("/symptoms-list/{username}")
+    public List<Symptom> getSymptomsByUser(@PathVariable String username) {
+        return symptomService.readSymptoms(username);
     }
 
     @GetMapping("/usernames")
@@ -65,6 +71,15 @@ public class SymptomsController {
 
         if(authentication.isAuthenticated()) {
             symptomService.saveSyptomList(symptoms, authentication.getName());
+        }
+    }
+
+    @PostMapping("/symptom-save/{username}")
+    public void symtomSaveForPatient(@PathVariable String username, @RequestBody List<Symptom> symptoms) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication.isAuthenticated()) {
+            symptomService.saveSyptomList(symptoms, username);
         }
     }
 }

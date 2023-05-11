@@ -44,12 +44,18 @@ function getCurrentRole() {
             console.log(data);
             if(data == "PATIENT") {
                 document.getElementById("doctorDiv").style.visibility = "hidden";
+                document.getElementById("doctorAdd").style.display = "none";
+                document.getElementById("doctorSave").style.display = "none";
+
                 initSymptoms();
             }
 
             if(data == "DOCTOR") {
                 console.log("hier");
                 document.getElementById("symptoms").style.display = "none";
+                document.getElementById("clientAdd").style.display = "none";
+                document.getElementById("clientSave").style.display = "none";
+
                 initUsernames();
             }
 
@@ -75,7 +81,31 @@ function initUsernames() {
 function getSymptomsByUsername() {
     var selectBox = document.getElementById("usernameSelectBox");
     var selectedText = selectBox.options[selectBox.selectedIndex].text;
-    console.log(selectedText);
+    var url = "http://localhost:8082/api/symptoms-list/"+selectedText;
+    fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+            let symptomDivs = '';
+            for (var i = 0; i < data.length; i++) {
+                var id = "symptom"+i;
+
+                if(data[i].active) {
+                    symptomDivs += "<div id='"+id+"' class='symptom'>" +
+                        "<h4>"+data[i].symptom+"</h4>" +
+                        "<input class='activeCheckbox' type='checkbox' checked>" +
+                        "<l>Zusatzinformationen:</l> <input class='descriptionText' type='text' value='"+data[i].description+"'>" +
+                        "</div>";
+                } else {
+                    symptomDivs += "<div id='"+id+"' class='symptom'>" +
+                        "<h4>"+data[i].symptom+"</h4>" +
+                        "<input class='activeCheckbox' type='checkbox'>" +
+                        "</l>Zusatzinformationen:</l> <input class='descriptionText' type='text'>" +
+                        "</div>"
+                }
+
+            }
+            document.getElementById("usernameSymptomsDiv").innerHTML = symptomDivs;
+        })
 }
 
 function addSymptom() {
@@ -86,6 +116,59 @@ function addSymptom() {
         "<input class='activeCheckbox' checked='checked' type='checkbox'>" +
         "</div>";
     document.getElementById("symptoms").innerHTML += symptomDivs;
+}
+
+function addSymptomDoctor() {
+    var symptomDivs = "" +
+        "<div class='symptom'>" +
+        "<h4>Weitere Symptome</h4>" +
+        "<input class='descriptionText' type='text'><p></p>" +
+        "<input class='activeCheckbox' checked='checked' type='checkbox'>" +
+        "</div>";
+    document.getElementById("usernameSymptomsDiv").innerHTML += symptomDivs;
+}
+
+function saveDoctor() {
+    var symptomDiv = document.getElementById("usernameSymptomsDiv");
+    var symptomsListDiv = symptomDiv.getElementsByTagName("div");
+    var activeSymptoms = [];
+
+    var selectedUsername = document.getElementById("usernameSelectBox").value;
+    console.log("savefor: "+selectedUsername);
+
+    for (var i = 0; i < symptomsListDiv.length; i++) {
+        var symptom = symptomsListDiv[i];
+        var text = symptom.getElementsByTagName("h4")[0].innerText;
+        var checked = symptom.getElementsByClassName("activeCheckbox")[0].checked;
+        var description = symptom.getElementsByClassName("descriptionText")[0].value;
+
+        console.log("desc : ", description);
+
+        var element = {
+            "symptom": text,
+            "description": description,
+            "active": checked
+        }
+        activeSymptoms.push(element);
+    }
+
+    if (activeSymptoms.length > 0) {
+        console.log("token: ", getCookie('XSRF-TOKEN'));
+        fetch('http://localhost:8082/api/symptom-save/'+selectedUsername, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+            },
+            body: JSON.stringify(activeSymptoms)
+        })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 }
 
 function save() {

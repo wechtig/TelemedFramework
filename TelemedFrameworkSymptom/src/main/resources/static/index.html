@@ -47,13 +47,16 @@
 
   </div>
 
-  <button onclick="addSymptom()">Symptom hinzuf&uuml;gen</button>
-  <button onclick="save()">Speichern</button>
+  <button id="clientAdd" onclick="addSymptom()">Symptom hinzuf&uuml;gen</button>
+  <button id="clientSave" onclick="save()">Speichern</button>
 
 </div>
 <div id="doctorDiv" layout:fragment="content" style="margin-top: 50px; margin-left: 20px">
+  <button id="doctorAdd" onclick="addSymptomDoctor()">Symptom hinzuf&uuml;gen</button>
+  <button id="doctorSave" onclick="saveDoctor()">Speichern</button>
   <p>Patient ausw&auml;hlen um die Symptome sehen zu k&ouml;nnen</p>
   <div id="usernameDiv"></div>
+  <div id="usernameSymptomsDiv"></div>
 </div>
 </body>
 </html>
