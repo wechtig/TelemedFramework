@@ -6,15 +6,19 @@ import com.example.telemedframeworkappointment.entities.UserEntity;
 import com.example.telemedframeworkappointment.repositories.AppointmentRepository;
 import com.example.telemedframeworkappointment.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 @RestController
@@ -137,5 +141,16 @@ public class AppointmentController {
     public void acceptAppoitment(@RequestBody AppointmentDto appointmentDto) {
         LocalDateTime dateTime = LocalDateTime.parse(appointmentDto.getDate(), formatter);
         appointmentRepository.setAccepted(appointmentDto.getUsernamePatient(), dateTime);
+    }
+
+    @GetMapping("/active-modules")
+    public String getActiveModules() {
+        try {
+            Properties props = PropertiesLoaderUtils.loadProperties(new FileSystemResource("telemed.properties"));
+            String propsString = props.toString();
+            return propsString.split("=")[1];
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

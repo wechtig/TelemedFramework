@@ -1,5 +1,5 @@
 function getCurrentName() {
-    var url = "http://localhost:8086/api/current"
+    var url = "http://localhost:8085/api/current"
     fetch(url)
         .then(response => response.text())
         .then(data => {
@@ -9,7 +9,7 @@ function getCurrentName() {
 }
 
 function getCurrentRole() {
-    var url = "http://localhost:8086/api/current-role"
+    var url = "http://localhost:8085/api/current-role"
     fetch(url)
         .then(response => response.text())
         .then(data => {
@@ -31,7 +31,7 @@ function getCurrentRole() {
 
 var appointmentsData = [];
 function getAppointments() {
-    var url = "http://localhost:8086/api/appointments"
+    var url = "http://localhost:8085/api/appointments"
     fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -59,7 +59,7 @@ function getAppointments() {
 function terminBestaetigen(i) {
     var appointment = appointmentsData[i];
 
-    fetch('http://localhost:8086/api/appointment-accept', {
+    fetch('http://localhost:8085/api/appointment-accept', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ function terminBestaetigen(i) {
 }
 
 function getOwnAppointments() {
-    var url = "http://localhost:8086/api/own-appointments"
+    var url = "http://localhost:8085/api/own-appointments"
     fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -114,7 +114,7 @@ function terminAnfragen() {
         "description" : beschreibung
     }
 
-    fetch('http://localhost:8086/api/appointment-request', {
+    fetch('http://localhost:8085/api/appointment-request', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -144,4 +144,36 @@ function getCookie(name) {
     }
 
     return cookieValue.substring(name.length + 1);
+}
+
+function getActiveModules() {
+    var url = "http://localhost:8085/api/active-modules"
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            var modules = data.split(",");
+
+            var communicationElement = document.getElementById("communication");
+            var symptomElement = document.getElementById("symptom");
+            var courseElement = document.getElementById("course");
+            var appointmentElement = document.getElementById("appointment");
+
+            for(var i = 0; i < modules.length; i++) {
+                if(modules[i] == "SYMPTOM") {
+                    document.getElementById("symptom").style.display = "";
+                }
+
+                if(modules[i] == "APPOINTMENT") {
+                    document.getElementById("appointment").style.display = "";
+                }
+
+                if(modules[i] == "COMMUNICATION") {
+                    document.getElementById("communication").style.display = "";
+                }
+
+                if(modules[i] == "COURSE") {
+                    document.getElementById("course").style.display = "";
+                }
+            }
+        })
 }

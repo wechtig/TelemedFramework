@@ -14,49 +14,57 @@
   <script type="text/javascript" src="symptoms.js"></script>
 </head>
 
-<body onload="javascript:getCurrentName(); getCurrentRole()">
+<body onload="javascript:getCurrentName(); getCurrentRole(), getActiveModules()">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item" id="communication" style="display: none">
+          <a class="nav-link logintext"
+             th:href="@{http://localhost:8081/}">Videocall und Chat</a>
+        </li>
+        <li class="nav-item" id="symptom" style="display: none">
+          <a class="nav-link logintext"
+             th:href="@{http://localhost:8082/}">Symptome</a>
+        </li>
+        <li class="nav-item" id="course" style="display: none">
+          <a class="nav-link logintext"
+             th:href="@{http://localhost:8083/}">Kurse</a>
+        </li>
+        <li class="nav-item" id="appointment" style="display: none">
+          <a class="nav-link logintext"
+             th:href="@{http://localhost:8085/}">Termine</a>
+        </li>
+      </ul>
+      <h6 class="nav-link" href="#" id="currentUser"></h6>
+      <form th:action="@{/logout}"
+            method="post">
+        <button type="submit" class="btn btn-primary"
+                value="Sign Out">Sign Out</button>
+      </form>
+    </div>
+  </nav>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link logintext"
-           th:href="@{http://localhost:8080/}">Videocall und Chat</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
-    </ul>
-    <h6 class="nav-link" href="#" id="currentUser"></h6>
-    <form th:action="@{/logout}"
-          method="post">
-      <button type="submit" class="btn btn-primary"
-              value="Sign Out">Sign Out</button>
-    </form>
+  <div layout:fragment="content" style="margin-top: 50px; margin-left: 20px">
+    <h1>Symptome festhalten</h1>
+    <p>Bitte kreuzen Sie hier Ihre Symptome an. Sie k&ouml;nnen auch weitere Beschwerden oder weitere Informationen zu den Symptomen festhalten</p>
+
+    <div id="symptoms">
+
+    </div>
+
+    <button id="clientAdd" onclick="addSymptom()">Symptom hinzuf&uuml;gen</button>
+    <button id="clientSave" onclick="save()">Speichern</button>
+
   </div>
-</nav>
-
-<div layout:fragment="content" style="margin-top: 50px; margin-left: 20px">
-  <h1>Symptome festhalten</h1>
-  <p>Bitte kreuzen Sie hier Ihre Symptome an. Sie k&ouml;nnen auch weitere Beschwerden oder weitere Informationen zu den Symptomen festhalten</p>
-
-  <div id="symptoms">
-
+  <div id="doctorDiv" layout:fragment="content" style="margin-top: 50px; margin-left: 20px">
+    <button id="doctorAdd" onclick="addSymptomDoctor()">Symptom hinzuf&uuml;gen</button>
+    <button id="doctorSave" onclick="saveDoctor()">Speichern</button>
+    <p>Patient ausw&auml;hlen um die Symptome sehen zu k&ouml;nnen</p>
+    <div id="usernameDiv"></div>
+    <div id="usernameSymptomsDiv"></div>
   </div>
-
-  <button id="clientAdd" onclick="addSymptom()">Symptom hinzuf&uuml;gen</button>
-  <button id="clientSave" onclick="save()">Speichern</button>
-
-</div>
-<div id="doctorDiv" layout:fragment="content" style="margin-top: 50px; margin-left: 20px">
-  <button id="doctorAdd" onclick="addSymptomDoctor()">Symptom hinzuf&uuml;gen</button>
-  <button id="doctorSave" onclick="saveDoctor()">Speichern</button>
-  <p>Patient ausw&auml;hlen um die Symptome sehen zu k&ouml;nnen</p>
-  <div id="usernameDiv"></div>
-  <div id="usernameSymptomsDiv"></div>
-</div>
 </body>
 </html>

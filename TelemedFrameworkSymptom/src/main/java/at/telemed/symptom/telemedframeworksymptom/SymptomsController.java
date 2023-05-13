@@ -4,15 +4,19 @@ import at.telemed.symptom.telemedframeworksymptom.dtos.Symptom;
 import at.telemed.symptom.telemedframeworksymptom.repositories.UserRepository;
 import at.telemed.symptom.telemedframeworksymptom.services.SymptomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.websocket.server.PathParam;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 @RestController
 @RequestMapping("/api")
@@ -80,6 +84,18 @@ public class SymptomsController {
 
         if(authentication.isAuthenticated()) {
             symptomService.saveSyptomList(symptoms, username);
+        }
+    }
+
+    @GetMapping("/active-modules")
+    public String getActiveModules() {
+        try {
+            String activeModulesString = "";
+            Properties props = PropertiesLoaderUtils.loadProperties(new FileSystemResource("telemed.properties"));
+            String propsString = props.toString();
+            return propsString.split("=")[1];
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

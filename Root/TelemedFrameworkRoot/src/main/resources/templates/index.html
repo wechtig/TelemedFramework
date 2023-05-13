@@ -9,10 +9,50 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous" />
-    <link rel="stylesheet"
-          href="/css/styles.css" />
 
-    <script type="text/javascript" src="appointment.js"></script>
+    <script>
+      function getCurrentName() {
+        var url = "http://localhost:8080/api/current"
+        fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                  document.getElementById("currentUser").innerText = data;
+                })
+
+      }
+
+      function getActiveModules() {
+        var url = "http://localhost:8080/api/active-modules"
+        fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                  var modules = data.split(",");
+
+                  var communicationElement = document.getElementById("communication");
+                  var symptomElement = document.getElementById("symptom");
+                  var courseElement = document.getElementById("course");
+                  var appointmentElement = document.getElementById("appointment");
+
+                  for(var i = 0; i < modules.length; i++) {
+                    if(modules[i] == "SYMPTOM") {
+                      document.getElementById("symptom").style.display = "";
+                    }
+
+                    if(modules[i] == "APPOINTMENT") {
+                      document.getElementById("appointment").style.display = "";
+                    }
+
+                    if(modules[i] == "COMMUNICATION") {
+                      document.getElementById("communication").style.display = "";
+                    }
+
+                    if(modules[i] == "COURSE") {
+                      document.getElementById("course").style.display = "";
+                    }
+                  }
+                })
+      }
+    </script>
 
   </head>
   <body onload="javascript:getCurrentName(), getActiveModules()">
@@ -23,12 +63,21 @@
         <li class="nav-item active">
           <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" id="communication" style="display: none">
           <a class="nav-link logintext"
-             th:href="@{http://localhost:8080/}">Videocall und Chat</a>
+             th:href="@{http://localhost:8081/}">Videocall und Chat</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
+        <li class="nav-item" id="symptom" style="display: none">
+          <a class="nav-link logintext"
+             th:href="@{http://localhost:8082/}">Symptome</a>
+        </li>
+        <li class="nav-item" id="course" style="display: none">
+          <a class="nav-link logintext"
+             th:href="@{http://localhost:8083/}">Kurse</a>
+        </li>
+        <li class="nav-item" id="appointment" style="display: none">
+          <a class="nav-link logintext"
+             th:href="@{http://localhost:8085/}">Termine</a>
         </li>
       </ul>
       <h6 class="nav-link" href="#" id="currentUser"></h6>
