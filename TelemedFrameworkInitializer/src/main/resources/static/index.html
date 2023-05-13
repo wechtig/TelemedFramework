@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Telemed Init</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous" />  <!--Bootstrap only for styling-->
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet"
+          href="/style.css" />
+    <script src="script.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <h1 style="padding-left: 30px; padding-top: 10px">Telemedizin Framework Initalizer</h1>
+
+    <div class="container">
+        <div class="row" style="margin-left: -300px;">
+            <div class="col-md-4" style="text-align: left; margin-top: 10px">
+                <h4>Willkommen beim Telemedizin Initializer!</h4>
+                <p>Dieser Initializer bietet Ihnen fertige Module und somit einen guten für Ihre Telemedizin Applikation</p>
+                <p>W&auml;hlen Sie aus den angegebenen Modulen starten Sie in wenigen Schritten Ihre eigene Telemedizin-Applikation!</p>
+                <p>Genauere Informationen zum Starten entnehmen Sie bitte der Dokumentation</p>
+                <button type="button" class="btn btn-primary" onclick="downloadModules()">Zum Download</button>
+            </div>
+            <div class="col-md-4">
+                <h4>Communication Module</h4>
+                <p>Das Communcation-Modul ermöglicht Ihnen die Kommunikation mit Ihren Patienten per Videocall</p>
+                <input id="communication" class='activeCheckbox' type='checkbox'>
+                <h4>Symptom Tracking Module</h4>
+                <p>Mit dem Syptom Tracking-Modul können Ihre Patienten Iher Symptome &uuml;bersichtlich verwalten</p>
+                <input id="symptom" class='activeCheckbox' type='checkbox'>
+                <h4>Termine Modul</h4>
+                <p>Mit dem Termin-Modul k&ouml;nnen Sie mit Ihren Patienten einfach online Termine ausmachen</p>
+                <input id="appointment" class='activeCheckbox' type='checkbox'>
+                <h4>Kurs Modul</h4>
+                <p>Mit den Kurs-Modul k&ouml;nnen Sie Information und Material bereitstellen, welches Ihre Patienten abonnieren k&ouml;nnen</p>
+                <input id="course" class='activeCheckbox' type='checkbox'>
+                <h4>Schnittstellen Module</h4>
+                <p>Das Schnittstellen-Modul erm&ouml;glicht Ihnen den Export der Patientendaten per FHIR-Schnittstelle zur Kommunikation mit anderen eHealth-Applikation</p>
+                <input id="export" class='activeCheckbox' type='checkbox'>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

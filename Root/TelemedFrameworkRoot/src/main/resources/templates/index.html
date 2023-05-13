@@ -12,21 +12,10 @@
     <link rel="stylesheet"
           href="/css/styles.css" />
 
-    <script>
-        function getCurrentName() {
-          console.log("test1");
-          var url = "http://localhost:8081/current"
-          fetch(url)
-                  .then(response => response.text())
-                  .then(data => {
-                    console.log("test2 ", data);
-                    document.getElementById("currentUser").innerText = data;
-                  })
-        }
-    </script>
-  </head>
+    <script type="text/javascript" src="appointment.js"></script>
 
-  <body onload="javascript:getCurrentName()">
+  </head>
+  <body onload="javascript:getCurrentName(), getActiveModules()">
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
