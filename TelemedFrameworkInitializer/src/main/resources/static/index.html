@@ -21,6 +21,9 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="help.html">Hilfe <span class="sr-only">(current)</span></a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -30,27 +33,42 @@
         <div class="row" style="margin-left: -300px;">
             <div class="col-md-4" style="text-align: left; margin-top: 10px">
                 <h4>Willkommen beim Telemedizin Initializer!</h4>
-                <p>Dieser Initializer bietet Ihnen fertige Module und somit einen guten für Ihre Telemedizin Applikation</p>
+                <p>Dieser Initializer bietet Ihnen fertige Module und somit einen guten f&uuml;r Ihre Telemedizin Applikation</p>
                 <p>W&auml;hlen Sie aus den angegebenen Modulen starten Sie in wenigen Schritten Ihre eigene Telemedizin-Applikation!</p>
                 <p>Genauere Informationen zum Starten entnehmen Sie bitte der Dokumentation</p>
+
+                <label>Praxisname</label>
+                <input id="praxisname"/>
+                </br>
+                <label>Corporate Design Farbe</label>
+                <input type="color" id="color"/>
+                <label>Logo</label>
+                <input type="file" id="logo"/>
+                </br>
+
                 <button type="button" class="btn btn-primary" onclick="downloadModules()">Zum Download</button>
             </div>
             <div class="col-md-4">
                 <h4>Communication Module</h4>
                 <p>Das Communcation-Modul ermöglicht Ihnen die Kommunikation mit Ihren Patienten per Videocall</p>
                 <input id="communication" class='activeCheckbox' type='checkbox'>
+                <hr>
                 <h4>Symptom Tracking Module</h4>
                 <p>Mit dem Syptom Tracking-Modul können Ihre Patienten Iher Symptome &uuml;bersichtlich verwalten</p>
                 <input id="symptom" class='activeCheckbox' type='checkbox'>
+                <hr>
                 <h4>Termine Modul</h4>
                 <p>Mit dem Termin-Modul k&ouml;nnen Sie mit Ihren Patienten einfach online Termine ausmachen</p>
                 <input id="appointment" class='activeCheckbox' type='checkbox'>
+                <hr>
                 <h4>Kurs Modul</h4>
                 <p>Mit den Kurs-Modul k&ouml;nnen Sie Information und Material bereitstellen, welches Ihre Patienten abonnieren k&ouml;nnen</p>
                 <input id="course" class='activeCheckbox' type='checkbox'>
+                <hr>
                 <h4>Schnittstellen Module</h4>
                 <p>Das Schnittstellen-Modul erm&ouml;glicht Ihnen den Export der Patientendaten per FHIR-Schnittstelle zur Kommunikation mit anderen eHealth-Applikation</p>
                 <input id="export" class='activeCheckbox' type='checkbox'>
+                <hr>
             </div>
         </div>
     </div>

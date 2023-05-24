@@ -1,11 +1,16 @@
 package at.fhjoanneum.telemedframework.telemedframeworkinitializer.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class DownloadDto {
     private boolean communication;
     private boolean symptom;
     private boolean appointment;
     private boolean course;
     private boolean export;
+    private String color;
+    private String praxisname;
+    private String logo;
 
     public DownloadDto(boolean communication, boolean symptom, boolean appointment, boolean course, boolean export) {
         this.communication = communication;
@@ -17,6 +22,14 @@ public class DownloadDto {
 
     public DownloadDto() {
 
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public boolean isCommunication() {
@@ -57,5 +70,21 @@ public class DownloadDto {
 
     public void setExport(boolean export) {
         this.export = export;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getPraxisname() {
+        return praxisname;
+    }
+
+    public void setPraxisname(String praxisname) {
+        this.praxisname = praxisname;
     }
 }

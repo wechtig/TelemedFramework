@@ -1,19 +1,49 @@
 function downloadModules() {
-
     var communicationChecked = document.getElementById("communication").checked;
     var symptomChecked = document.getElementById("symptom").checked;
     var appointmentChecked = document.getElementById("appointment").checked;
     var courseChecked = document.getElementById("course").checked;
     var exportChecked = document.getElementById("export").checked;
+    var praxisname = document.getElementById("praxisname").value;
+    var color = document.getElementById("color").value;
+    var logo = document.getElementById("logo").files[0];
 
-    var downloadElement = {
-        "communication" : communicationChecked,
-        "symptom" : symptomChecked,
-        "appointment" : appointmentChecked,
-        "course" : courseChecked,
-        "export" : exportChecked,
+    if (logo) {
+        var logoBase64;
+        var reader = new FileReader();
+        reader.readAsDataURL(logo);
+        reader.onload = function () {
+            logoBase64 = reader.result;
+            console.log(reader.result);
+            var downloadElement = {
+                "communication": communicationChecked,
+                "symptom": symptomChecked,
+                "appointment": appointmentChecked,
+                "course": courseChecked,
+                "export": exportChecked,
+                "praxisname": praxisname,
+                "color": color,
+                "logo": logoBase64
+            }
+
+            send(downloadElement);
+        };
+    } else {
+        var downloadElement = {
+            "communication": communicationChecked,
+            "symptom": symptomChecked,
+            "appointment": appointmentChecked,
+            "course": courseChecked,
+            "export": exportChecked,
+            "praxisname": praxisname,
+            "color": color
+        }
+
+        send(downloadElement)
     }
+}
 
+function send(downloadElement) {
     fetch('http://localhost:9000/api/download/', {
         method: 'POST',
         headers: {
@@ -40,3 +70,4 @@ function downloadModules() {
             console.error(error);
         });
 }
+

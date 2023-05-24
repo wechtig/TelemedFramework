@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -28,26 +29,42 @@ public class InitializerController {
             if(downloadDtod.isSymptom()) {
                 addToZip("modules/symptom.jar", zipOut);
                 addToZip("files/createsymptom.sql", zipOut);
-                propertyFile += "SYMPTOM,";
+                propertyFile += "SYMPTOM-";
             }
             if(downloadDtod.isCommunication()) {
                 addToZip("modules/communication.jar", zipOut);
                 addToZip("files/createcommunication.sql", zipOut);
-                propertyFile += "COMMUNICATION,";
+                propertyFile += "COMMUNICATION-";
             }
             if(downloadDtod.isCourse()) {
                 addToZip("modules/course.jar", zipOut);
                 addToZip("files/createcourse.sql", zipOut);
-                propertyFile += "COURSE,";
+                propertyFile += "COURSE-";
             }
             if(downloadDtod.isAppointment()) {
                 addToZip("modules/appointment.jar", zipOut);
                 addToZip("files/createappointment.sql", zipOut);
-                propertyFile += "APPOINTMENT,";
+                propertyFile += "APPOINTMENT-";
             }
             if(downloadDtod.isExport()) {
                 addToZip("modules/export.jar", zipOut);
-                propertyFile += "EXPORT,";
+                propertyFile += "EXPORT-";
+            }
+
+            if(downloadDtod.getColor() != "") {
+                propertyFile += "\nCOLOR="+downloadDtod.getColor();
+            }
+
+            if(downloadDtod.getPraxisname() != "") {
+                propertyFile += "\nPRAXISNAME="+downloadDtod.getPraxisname();
+            }
+
+            if(downloadDtod.getLogo() != "") {
+                ZipEntry zipEntryLogo = new ZipEntry("logo.png");
+                zipOut.putNextEntry(zipEntryLogo);
+                String partSeparator = ",";
+                String encodedImg = downloadDtod.getLogo().split(partSeparator)[1];
+                zipOut.write(Base64.getDecoder().decode(encodedImg));
             }
 
             ZipEntry zipEntry = new ZipEntry("telemed.properties");
