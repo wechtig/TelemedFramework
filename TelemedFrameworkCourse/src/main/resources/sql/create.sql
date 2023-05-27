@@ -11,7 +11,8 @@ create table telemed_course_entry
     course_id    varchar(80),
     title varchar(256),
     text varchar(512),
-    attachment blob,
+    filename varchar(128),
+    attachment LONGBLOB,
     creation_date DATETIME
 );
 

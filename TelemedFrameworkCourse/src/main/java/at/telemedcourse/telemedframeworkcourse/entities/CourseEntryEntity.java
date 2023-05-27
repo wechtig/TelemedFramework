@@ -17,17 +17,32 @@ public class CourseEntryEntity {
     private UUID courseId;
     private String title;
     private String text;
-    private byte[] attachment;
+
+    private String filename;
+
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
-    public CourseEntryEntity(UUID uid, UUID courseId, String title, String text, byte[] attachment, LocalDateTime creationDate) {
+    @Lob
+    @Column(name = "attachment", nullable = false)
+    private byte[] attachment;
+
+    public CourseEntryEntity(UUID uid, UUID courseId, String title, String text, byte[] attachment, String filename, LocalDateTime creationDate) {
         this.uid = uid;
         this.courseId = courseId;
         this.title = title;
         this.text = text;
         this.attachment = attachment;
+        this.filename = filename;
         this.creationDate = creationDate;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public CourseEntryEntity() {}

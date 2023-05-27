@@ -134,7 +134,6 @@ function saveDoctor() {
     var activeSymptoms = [];
 
     var selectedUsername = document.getElementById("usernameSelectBox").value;
-    console.log("savefor: "+selectedUsername);
 
     for (var i = 0; i < symptomsListDiv.length; i++) {
         var symptom = symptomsListDiv[i];

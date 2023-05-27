@@ -14,10 +14,12 @@
     <script type="text/javascript" src="course.js"></script>
   </head>
 
-  <body onload="javascript:getCurrentName(), getActiveModules()">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <body onload="javascript:getCurrentName(), getCurrentRole(), getActiveModules()">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" id="nav">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
+        <img id="logo" style="width: 80px; height: auto"/>
+        <h6 class="nav-link" href="#" id="praxisname"></h6>
         <li class="nav-item active">
           <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
@@ -46,5 +48,25 @@
       </form>
     </div>
   </nav>
+  <h1>Kurse</h1>
+  <div id="doctorDiv" layout:fragment="content" style="margin-top: 50px; margin-left: 20px">
+    <h4>Kurs hinzufügen</h4>
+    <input id="courseName"/>
+    <input id="courseDescription"/>
+    <button id="courseAdd" onclick="newCourse()">Kurs hinzufügen</button>
+    <h4>Kurseintrag hinzufügen</h4>
+    <div id="courseSelectBoxDiv"></div>
+    <input id="title"/>
+    <input id="text"/>
+    <input type="file" id="attachment"/>
+
+    <button id="courseEntryAdd" onclick="addCourseEntry()">Kurseintrag hinzufügen</button>
+    <div id="courseEntryDiv"></div>
+  </div>
+  <div id="patientDiv" layout:fragment="content" style="margin-top: 50px; margin-left: 20px">
+    <h4>Kurse</h4>
+    <div id="courseSelectBoxPatientDiv"></div>
+    <div id="patientCourseEntries"></div>
+  </div>
   </body>
 </html>
