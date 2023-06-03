@@ -14,13 +14,12 @@ public class CourseUserEntity {
     private UUID uid;
 
     private String username;
-    @Column(name = "course_id")
-    private String courseId;
+    private String course;
 
-    public CourseUserEntity(UUID uid, String username, String courseId) {
+    public CourseUserEntity(UUID uid, String username, String course) {
         this.uid = uid;
         this.username = username;
-        this.courseId = courseId;
+        this.course = course;
     }
 
     public CourseUserEntity() {
@@ -43,11 +42,11 @@ public class CourseUserEntity {
         this.username = username;
     }
 
-    public String getCourseId() {
-        return courseId;
+    public String getCourse() {
+        return course;
     }
 
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
+    public void setCourse(String course) {
+        this.course = course;
     }
 }

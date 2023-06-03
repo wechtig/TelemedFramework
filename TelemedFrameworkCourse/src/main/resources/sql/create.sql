@@ -19,5 +19,5 @@ create table telemed_course_entry
 create table telemed_course_user (
      uid    varchar(80) primary key,
      username varchar(80),
-     course_id varchar(80)
+     course varchar(80)
 );

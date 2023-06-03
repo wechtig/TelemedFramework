@@ -34,6 +34,14 @@ function getCurrentName() {
         .then(data => {
             document.getElementById("currentUser").innerText = data;
         })
+
+    var urlLgo = "http://localhost:8082/api/logo";
+    fetch(urlLgo)
+        .then(response => response.text())
+        .then(data => {
+            var imageByteArray = data;
+            document.getElementById("logo").src = "data:image/png;base64," + imageByteArray;
+        })
 }
 
 function getCurrentRole() {
@@ -230,27 +238,35 @@ function getActiveModules() {
     fetch(url)
         .then(response => response.text())
         .then(data => {
-            var modules = data.split(",");
+            var props = data.split(",");
+            console.log(props);
+            if(props[1]) {
+                document.getElementById("nav").style.backgroundColor = props[1].split("=")[1];
+            }
 
-            var communicationElement = document.getElementById("communication");
-            var symptomElement = document.getElementById("symptom");
-            var courseElement = document.getElementById("course");
-            var appointmentElement = document.getElementById("appointment");
+            if(props[2]) {
+                console.log("praxisname ");
+                document.getElementById("praxisname").innerText = props[2].split("=")[1];
+            }
 
-            for(var i = 0; i < modules.length; i++) {
-                if(modules[i] == "SYMPTOM") {
+            var propsMods1 = props[0].split("=");
+            var propsMods2 = propsMods1[1].split("-");
+            console.log("propsMods2 ", propsMods2);
+
+            for(var i = 0; i < propsMods2.length; i++) {
+                if(propsMods2[i] == "SYMPTOM") {
                     document.getElementById("symptom").style.display = "";
                 }
 
-                if(modules[i] == "APPOINTMENT") {
+                if(propsMods2[i] == "APPOINTMENT") {
                     document.getElementById("appointment").style.display = "";
                 }
 
-                if(modules[i] == "COMMUNICATION") {
+                if(propsMods2[i] == "COMMUNICATION") {
                     document.getElementById("communication").style.display = "";
                 }
 
-                if(modules[i] == "COURSE") {
+                if(propsMods2[i] == "COURSE") {
                     document.getElementById("course").style.display = "";
                 }
             }

@@ -12,11 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.websocket.server.PathParam;
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.nio.file.Files;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -92,10 +91,22 @@ public class SymptomsController {
         try {
             String activeModulesString = "";
             Properties props = PropertiesLoaderUtils.loadProperties(new FileSystemResource("telemed.properties"));
-            String propsString = props.toString();
-            return propsString.split("=")[1];
+            var propsStr = props.toString().strip();
+            return propsStr.replaceAll("}", "");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/logo")
+    public String getLogo() {
+        File file = new File("logo.png");
+        byte[] fileContent = new byte[0];
+        try {
+            fileContent = Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return Base64.getEncoder().encodeToString(fileContent);
     }
 }

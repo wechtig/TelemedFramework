@@ -9,4 +9,7 @@ import java.util.UUID;
 public interface CourseRepository extends JpaRepository<CourseEntity, UUID> {
     @Query
     CourseEntity getByName(String name);
+    @Query()
+    CourseEntity getByUid(UUID uid);
 }
+

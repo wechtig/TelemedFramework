@@ -4,8 +4,10 @@ import at.telemedcourse.telemedframeworkcourse.dto.NewCourseDto;
 import at.telemedcourse.telemedframeworkcourse.dto.NewCourseEntryDto;
 import at.telemedcourse.telemedframeworkcourse.entities.CourseEntity;
 import at.telemedcourse.telemedframeworkcourse.entities.CourseEntryEntity;
+import at.telemedcourse.telemedframeworkcourse.entities.CourseUserEntity;
 import at.telemedcourse.telemedframeworkcourse.repositories.CourseEntryRepository;
 import at.telemedcourse.telemedframeworkcourse.repositories.CourseRepository;
+import at.telemedcourse.telemedframeworkcourse.repositories.CourseUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -22,9 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,6 +36,10 @@ public class CourseController {
 
     @Autowired
     private CourseEntryRepository courseEntryRepository;
+
+
+    @Autowired
+    private CourseUserRepository courseUserRepository;
 
     @GetMapping("/current-role")
     public String getCurrentRole() {
@@ -101,10 +105,59 @@ public class CourseController {
         courseEntryRepository.save(courseEntryEntity);
     }
 
-    @GetMapping("/courseentry/{coursename}")
-    public List<CourseEntryEntity> getAllCourses(@PathVariable String coursename) {
-        CourseEntity courseEntity = courseRepository.getByName(coursename);
-        return courseEntryRepository.getByCourseId(courseEntity.getUid());
+    @PostMapping("/unregister/{courseName}")
+    public void removeRegistration(@PathVariable String courseName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        var course = courseRepository.getByName(courseName);
+        if(course == null) {
+            return;
+        }
+
+        var registered = courseUserRepository.getByUsernameAndCourse(name, course.getName());
+
+        if(registered != null) {
+            courseUserRepository.deleteByUserAndCourse(registered.getUsername(), registered.getCourse());
+        }
+    }
+
+
+    @PostMapping("/register/{courseName}")
+    public void register(@PathVariable String courseName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        var course = courseRepository.getByName(courseName);
+        if(course == null) {
+            return;
+        }
+
+        var registered = courseUserRepository.getByUsernameAndCourse(name, course.getName());
+        if(registered != null) {
+            return;
+        }
+
+        CourseUserEntity courseUserEntity = new CourseUserEntity();
+        courseUserEntity.setUsername(name);
+        courseUserEntity.setCourse(course.getName());
+        courseUserRepository.save(courseUserEntity);
+    }
+
+    @GetMapping("/currentcourseentries")
+    public List<CourseEntryEntity> getCurrentRegisteredByUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        var courseUserEntities = courseUserRepository.getByUsername(name);
+
+        List<CourseEntryEntity> courseEntryEntities = new ArrayList<>();
+
+        for(CourseUserEntity courseUserEntity : courseUserEntities) {
+            CourseEntity courseEntity = courseRepository.getByName(courseUserEntity.getCourse());
+            var courseEntries = courseEntryRepository.getByCourseId(courseEntity.getUid());
+            courseEntryEntities.addAll(courseEntries);
+        }
+
+        courseEntryEntities.sort(Comparator.comparing(course -> course.getCreationDate()));
+        return courseEntryEntities;
     }
 
     @PostMapping("/download/{filename}")

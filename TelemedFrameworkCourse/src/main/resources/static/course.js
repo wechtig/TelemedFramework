@@ -20,7 +20,8 @@ function getCurrentRole() {
 
             if(data == "PATIENT") {
                 document.getElementById("doctorDiv").style.display = "none";
-                initCourseDivPatient();
+                initCourseDivPatientSelectBox();
+                getCurrentRegisteredEntriesForCourse();
             }
 
         })
@@ -50,13 +51,13 @@ function initCourseDiv(){
         })
 }
 
-function initCourseDivPatient(){
+function initCourseDivPatientSelectBox(){
     var url = "http://localhost:8083/api/course"
     fetch(url)
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            var courseSelectBox = "<select id='patientSelectBox' onChange='getEntrysForCourse()'>";
+            var courseSelectBox = "<select id='patientSelectBox'>";
             for (var i = 0; i < data.length; i++) {
                 courseSelectBox += "<option>"+data[i]+"</option>";
             }
@@ -66,23 +67,21 @@ function initCourseDivPatient(){
         })
 }
 
-function getEntrysForCourse() {
-    var courseName = document.getElementById("patientSelectBox").value;
-
-    var url = "http://localhost:8083/api/courseentry/"+courseName;
+function getCurrentRegisteredEntriesForCourse() {
+    var url = "http://localhost:8083/api/currentcourseentries/";
     fetch(url)
         .then(response => response.json())
         .then(data => {
-
             console.log(data);
             if(data.length < 1) {
                 document.getElementById("patientCourseEntries").innerHTML
                     = "<p>Kein Eintrag!</p>";
             } else {
                 for (var i = 0; i < data.length; i++) {
+                    var formattedDate = getFormattedDate(data[i].creationDate);
                     var patientCourseEntries = "<div>";
                     patientCourseEntries += "<h4>"+data[i].title+"</h4>";
-                    patientCourseEntries += "Erstellt am <p>"+data[i].creationDate+"</p>";
+                    patientCourseEntries += "<p>Erstellt am "+formattedDate+"</p>";
                     patientCourseEntries += "<p>"+data[i].text+"</p>";
                     patientCourseEntries +=
                         "<a href='#' onclick='downloadAttachment(this)' data-filename='"+data[i].filename + "'>"+data[i].filename+"</a>"
@@ -92,6 +91,46 @@ function getEntrysForCourse() {
                 document.getElementById("patientCourseEntries").innerHTML = patientCourseEntries;
             }
         })
+}
+
+function removeRegistrationForCourse() {
+    var courseName = document.getElementById("patientSelectBox").value;
+    fetch('http://localhost:8083/api/unregister/'+courseName, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+        },
+        body: JSON.stringify(courseName)
+    })
+        .then(response => {
+            initCourseDiv();
+            var alertElement = document.createElement('div');
+            alertElement.classList.add('alert', 'alert-success');
+            alertElement.textContent = 'Sie wurden vom Kurs abgemeldet!';
+
+            document.body.appendChild(alertElement);
+            setTimeout(function() {
+                alertElement.remove();
+            }, 3000);
+            console.log(response);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+function getFormattedDate(date) {
+    const datetime = new Date(date);
+    const day = datetime.getDate();
+    const month = datetime.getMonth() + 1;
+    const year = datetime.getFullYear();
+    const formattedDate = `${day < 10 ? '0' + day : day}.${month < 10 ? '0' + month : month}.${year}`;
+    const hours = datetime.getHours();
+    const minutes = datetime.getMinutes();
+    const formattedTime = `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+    const formattedDateTime = `${formattedDate} um ${formattedTime}`;
+    return formattedDateTime;
 }
 
 function downloadAttachment(link) {
@@ -269,4 +308,32 @@ function getCookie(name) {
     }
 
     return cookieValue.substring(name.length + 1);
+}
+
+function registerForCourse() {
+    var courseName = document.getElementById("patientSelectBox").value;
+    fetch('http://localhost:8083/api/register/'+courseName, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+        },
+        body: JSON.stringify(courseName)
+    })
+        .then(response => {
+            var alertElement = document.createElement('div');
+            alertElement.classList.add('alert', 'alert-success');
+            alertElement.textContent = 'Sie haben sich beim Kurs angemeldet!';
+
+            document.body.appendChild(alertElement);
+            setTimeout(function() {
+                alertElement.remove();
+            }, 3000);
+            console.log(response);
+            initCourseDiv();
+            console.log(response);
+        })
+        .catch(error => {
+            console.error(error);
+        });
 }
