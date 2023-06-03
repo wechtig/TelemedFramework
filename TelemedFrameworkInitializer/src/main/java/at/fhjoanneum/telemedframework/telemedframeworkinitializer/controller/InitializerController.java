@@ -59,7 +59,7 @@ public class InitializerController {
                 propertyFile += "\nPRAXISNAME="+downloadDtod.getPraxisname();
             }
 
-            if(downloadDtod.getLogo() != "") {
+            if(downloadDtod.getLogo() != null && downloadDtod.getLogo() != "") {
                 ZipEntry zipEntryLogo = new ZipEntry("logo.png");
                 zipOut.putNextEntry(zipEntryLogo);
                 String partSeparator = ",";
