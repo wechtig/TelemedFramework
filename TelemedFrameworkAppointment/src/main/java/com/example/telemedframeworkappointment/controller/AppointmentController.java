@@ -13,13 +13,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -146,11 +145,24 @@ public class AppointmentController {
     @GetMapping("/active-modules")
     public String getActiveModules() {
         try {
+            String activeModulesString = "";
             Properties props = PropertiesLoaderUtils.loadProperties(new FileSystemResource("telemed.properties"));
-            String propsString = props.toString();
-            return propsString.split("=")[1];
+            var propsStr = props.toString().strip();
+            return propsStr.replaceAll("}", "");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/logo")
+    public String getLogo() {
+        File file = new File("logo.png");
+        byte[] fileContent = new byte[0];
+        try {
+            fileContent = Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return Base64.getEncoder().encodeToString(fileContent);
     }
 }

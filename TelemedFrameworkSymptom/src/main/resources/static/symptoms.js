@@ -241,7 +241,7 @@ function getActiveModules() {
             var props = data.split(",");
             console.log(props);
             if(props[1]) {
-                document.getElementById("nav").style.backgroundColor = props[1].split("=")[1];
+                document.getElementById("navbarSupportedContent").style.backgroundColor = props[1].split("=")[1];
             }
 
             if(props[2]) {

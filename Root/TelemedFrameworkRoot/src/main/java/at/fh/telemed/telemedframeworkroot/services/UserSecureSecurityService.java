@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 @Service
 public class UserSecureSecurityService implements UserDetailsService {
@@ -29,6 +32,8 @@ public class UserSecureSecurityService implements UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
 
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     public UserEntity saveUser(MedUser user) {
         UserEntity userEntity = new UserEntity();
         userEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -37,6 +42,9 @@ public class UserSecureSecurityService implements UserDetailsService {
         userEntity.setLastName(user.getLastName());
         userEntity.setFirstName(user.getFirstName());
         userEntity.setUsername(user.getUsername());
+        userEntity.setGender(user.getGender());
+        LocalDate date = LocalDate.parse(user.getBirthDate(), formatter);
+        userEntity.setBirthDate(date);
         return userService.createUser(userEntity);
     }
 

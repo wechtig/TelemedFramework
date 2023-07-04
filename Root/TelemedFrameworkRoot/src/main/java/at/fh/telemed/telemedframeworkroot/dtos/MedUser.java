@@ -11,6 +11,8 @@ public class MedUser {
     private String lastName;
     private String role;
 
+    private String birthDate;
+    private String gender;
     public MedUser() {
 
     }
@@ -24,6 +26,22 @@ public class MedUser {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public UUID getUid() {
