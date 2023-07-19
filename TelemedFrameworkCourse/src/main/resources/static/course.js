@@ -189,7 +189,6 @@ function addCourseEntry() {
         reader.readAsDataURL(attachment);
         reader.onload = function () {
             attachmentBase64 = reader.result;
-            console.log(reader.result);
             var downloadElement = {
                 "title": title,
                 "text": text,
@@ -265,7 +264,7 @@ function getActiveModules() {
             var props = data.split(",");
             console.log(props);
             if(props[1]) {
-                document.getElementById("nav").style.backgroundColor = props[1].split("=")[1];
+                document.getElementById("navbarSupportedContent").style.backgroundColor = props[1].split("=")[1];
             }
 
             if(props[2]) {

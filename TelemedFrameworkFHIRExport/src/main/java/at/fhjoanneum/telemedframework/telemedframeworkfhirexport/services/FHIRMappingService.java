@@ -77,9 +77,11 @@ public class FHIRMappingService {
 
             Observation observation = new Observation();
             observation.getStatusElement().setValueAsString("final");
-            observation.getCode().addCoding().setSystem("http://loinc.org").setCode(code).setDisplay(symptom.getSymptom());
+            observation.getCode().addCoding()
+                    .setSystem("http://loinc.org")
+                    .setCode(code)
+                    .setDisplay(symptom.getSymptom());
             observation.setId("observation"+observationCounter);
-
             Reference reference = new Reference();
             reference.setReference("Observation/" + observation.getId());
             reference.setType("Observation");
