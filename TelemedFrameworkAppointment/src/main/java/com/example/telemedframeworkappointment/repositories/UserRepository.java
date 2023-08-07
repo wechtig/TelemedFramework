@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     UserEntity findByUsername(String username);
     @Query("select u from UserEntity u where u.lastName = :lastName")
     UserEntity findByLastname(String lastName);
+
+    UserEntity findByUid(UUID uid);
 }

@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     @Query("select u.username from UserEntity u where u.role not like 'DOCTOR'")
     List<String> getUsernames();
+    UserEntity findByUsername(String username);
 }

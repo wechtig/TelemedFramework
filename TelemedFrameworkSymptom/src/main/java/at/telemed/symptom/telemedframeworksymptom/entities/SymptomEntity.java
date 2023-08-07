@@ -2,10 +2,7 @@ package at.telemed.symptom.telemedframeworksymptom.entities;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -17,7 +14,8 @@ public class SymptomEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private UUID uid;
 
-    private String username;
+    @Column(name = "user_id")
+    private String userId;
 
     private String symptom;
 
@@ -39,12 +37,12 @@ public class SymptomEntity {
         this.description = description;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getSymptom() {

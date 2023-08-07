@@ -14,11 +14,11 @@ public class AppointmentEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private UUID uid;
 
-    @Column(name = "username_patient")
-    private String usernamePatient;
+    @Column(name = "patient_id")
+    private String patientId;
 
-    @Column(name = "username_doctor ")
-    private String usernameDoctor;
+    @Column(name = "doctor_id ")
+    private String doctorId;
 
     private String description;
 
@@ -32,15 +32,6 @@ public class AppointmentEntity {
 
     public AppointmentEntity() {}
 
-    public AppointmentEntity(UUID uid, String usernamePatient, String usernameDoctor, String description, boolean accepted, String location, LocalDateTime date) {
-        this.uid = uid;
-        this.usernamePatient = usernamePatient;
-        this.usernameDoctor = usernameDoctor;
-        this.description = description;
-        this.accepted = accepted;
-        this.location = location;
-        this.date = date;
-    }
 
     public UUID getUid() {
         return uid;
@@ -50,20 +41,20 @@ public class AppointmentEntity {
         this.uid = uid;
     }
 
-    public String getUsernamePatient() {
-        return usernamePatient;
+    public String getPatientId() {
+        return patientId;
     }
 
-    public void setUsernamePatient(String usernamePatient) {
-        this.usernamePatient = usernamePatient;
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 
-    public String getUsernameDoctor() {
-        return usernameDoctor;
+    public String getDoctorId() {
+        return doctorId;
     }
 
-    public void setUsernameDoctor(String usernameDoctor) {
-        this.usernameDoctor = usernameDoctor;
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
     }
 
     public String getDescription() {

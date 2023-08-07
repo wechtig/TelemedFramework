@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SymptomRepository extends JpaRepository<SymptomEntity, UUID> {
-    List<SymptomEntity> findByUsername(String username);
+    List<SymptomEntity> findByUserId(String userId);
     @Modifying
     @Transactional
-    @Query("delete from SymptomEntity s where s.username = :username")
-    void deleteByUsername(String username);
+    @Query("delete from SymptomEntity s where s.userId = :userId")
+    void deleteByUserId(String userId);
 }

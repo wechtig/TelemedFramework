@@ -2,7 +2,9 @@ package at.telemed.symptom.telemedframeworksymptom.services;
 
 import at.telemed.symptom.telemedframeworksymptom.dtos.Symptom;
 import at.telemed.symptom.telemedframeworksymptom.entities.SymptomEntity;
+import at.telemed.symptom.telemedframeworksymptom.entities.UserEntity;
 import at.telemed.symptom.telemedframeworksymptom.repositories.SymptomRepository;
+import at.telemed.symptom.telemedframeworksymptom.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -26,9 +28,14 @@ public class SymptomService {
     private SymptomRepository symptomRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private ResourceLoader resourceLoader;
 
     public List<Symptom> readSymptoms(String username) {
+        UserEntity userEntity = userRepository.findByUsername(username);
+
         Resource resource = resourceLoader.getResource("classpath:"+SYMPTOMS_FILE);
         List<Symptom> symptoms = new ArrayList<>();
         try {
@@ -37,7 +44,7 @@ public class SymptomService {
                         .map(String::trim)
                         .collect(Collectors.toList());
 
-            var activeSymptoms = symptomRepository.findByUsername(username);
+            var activeSymptoms = symptomRepository.findByUserId(userEntity.getUid().toString());
             for(var symptomText : allSymptoms) {
                 Symptom symptomDto = new Symptom();
                 symptomDto.setSymptom(symptomText);
@@ -80,12 +87,14 @@ public class SymptomService {
     }
 
     public void saveSyptomList(List<Symptom> symptoms, String username) {
-        symptomRepository.deleteByUsername(username);
+        UserEntity userEntity = userRepository.findByUsername(username);
+
+        symptomRepository.deleteByUserId(userEntity.getUid().toString());
         for(Symptom symptom : symptoms) {
             if(symptom.isActive()) {
                 SymptomEntity symptomEntity = new SymptomEntity();
                 symptomEntity.setSymptom(symptom.getSymptom());
-                symptomEntity.setUsername(username);
+                symptomEntity.setUserId(userEntity.getUid().toString());
                 symptomEntity.setDescription(symptom.getDescription());
 
                 symptomRepository.save(symptomEntity);
@@ -94,7 +103,9 @@ public class SymptomService {
     }
 
     public List<Symptom> readSymptomsByUsername(String username) {
-        var entities = symptomRepository.findByUsername(username);
+        UserEntity userEntity = userRepository.findByUsername(username);
+
+        var entities = symptomRepository.findByUserId(userEntity.getUid().toString());
         List<Symptom> symptoms = new ArrayList<>();
 
         for(SymptomEntity symptomEntity : entities) {

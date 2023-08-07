@@ -91,14 +91,20 @@ function getOwnAppointments() {
             console.log("dat: ",data);
             let ownAppointments = '<h2>Termine</h2>';
             for (var i = 0; i < data.length; i++) {
-                if(data[i].location == "ONLINE") {
-                    ownAppointments += "<div><l>Termin am "+data[i].date+" online mit "+data[i].fullnameDoctor+"</l>";
-                } else {
-                    ownAppointments += "<div><l>Termin am "+data[i].date+" mit "+data[i].fullnameDoctor +". Ort: "+data[i].location+"</l>";
-                }
 
                 if(!data[i].accepted) {
+                    if(data[i].location == "ONLINE") {
+                        ownAppointments += "<div><l>Terminanfrage am "+data[i].date+" online</l>";
+                    } else {
+                        ownAppointments += "<div><l>Terminanfrage am "+data[i].date+". Ort: "+data[i].location+"</l>";
+                    }
                     ownAppointments += "<l class='warning'> Der Termin wurde vom Arzt noch nicht best&auml;tigt!</l>"
+                } else {
+                    if(data[i].location == "ONLINE") {
+                        ownAppointments += "<div><l>Termin am "+data[i].date+" online mit "+data[i].fullnameDoctor+"</l>";
+                    } else {
+                        ownAppointments += "<div><l>Termin am "+data[i].date+" mit "+data[i].fullnameDoctor +". Ort: "+data[i].location+"</l>";
+                    }
                 }
 
                 ownAppointments += "</div></hr>"

@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, UUID> {
-    List<AppointmentEntity> findByUsernamePatient(String usernamePatient);
+    List<AppointmentEntity> findByPatientId(String patientId);
 
     @Modifying
     @Transactional
-    @Query("update AppointmentEntity set accepted = true where usernamePatient = :usernamePatient and date = :dateTime")
-    void setAccepted(String usernamePatient, LocalDateTime dateTime);
+    @Query("update AppointmentEntity set accepted = true where patientId = :patientId and date = :dateTime")
+    void setAcceptedForPatient(String patientId, LocalDateTime dateTime);
 }

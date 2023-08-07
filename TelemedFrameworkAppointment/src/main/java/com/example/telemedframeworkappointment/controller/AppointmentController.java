@@ -52,8 +52,8 @@ public class AppointmentController {
         }
 
         AppointmentEntity appointmentEntity = new AppointmentEntity();
-        appointmentEntity.setAccepted(userEntity.getRole() == "PATIENT" ? false : true);
-        appointmentEntity.setUsernamePatient(name);
+        appointmentEntity.setAccepted(userEntity.getRole().equals("PATIENT") ? false : true);
+        appointmentEntity.setPatientId(userEntity.getUid().toString());
         appointmentEntity.setLocation(appointmentDto.getLocation());
         LocalDateTime dateTime = LocalDateTime.parse(appointmentDto.getDate(), formatter);
         appointmentEntity.setDate(dateTime);
@@ -74,19 +74,28 @@ public class AppointmentController {
             AppointmentDto appointmentDto = new AppointmentDto();
             appointmentDto.setId(appointmentEntity.getUid());
             appointmentDto.setAccepted(appointmentEntity.isAccepted());
-            appointmentDto.setUsernamePatient(appointmentEntity.getUsernamePatient());
-            appointmentDto.setUsernameDoctor(appointmentEntity.getUsernameDoctor());
+
+            UserEntity userEntityDoctor = userRepository.findByUsername(name);
+
+            Optional<UserEntity> userEntityPatientOpt = userRepository.findAll().stream()
+                    .filter(patient -> patient.getUid().toString().equals(appointmentEntity.getPatientId())).findFirst();
+
+            if(!userEntityPatientOpt.isPresent()) {
+                continue;
+            }
+
+            UserEntity userEntityPatient = userEntityPatientOpt.get();
+            appointmentDto.setUsernamePatient(userEntityPatient.getUsername());
+            appointmentDto.setUsernameDoctor(userEntityDoctor.getUsername());
             appointmentDto.setLocation(appointmentEntity.getLocation());
             appointmentDto.setDate(appointmentEntity.getDate().format(formatter));
             appointmentDto.setDescription(appointmentEntity.getDescription());
-            UserEntity fullnameDoctor = userRepository.findByUsername(appointmentEntity.getUsernameDoctor());
 
-            if(fullnameDoctor != null) {
-                appointmentDto.setFullnameDoctor(fullnameDoctor.getFirstName() + " " + fullnameDoctor.getLastName());
+            if(userEntityDoctor != null) {
+                appointmentDto.setFullnameDoctor(userEntityDoctor.getFirstName() + " " + userEntityDoctor.getLastName());
             }
 
-            UserEntity fullnamePatient = userRepository.findByUsername(appointmentEntity.getUsernamePatient());
-            appointmentDto.setFullnameDoctor(fullnamePatient.getFirstName() + " " + fullnamePatient.getLastName());
+            appointmentDto.setFullnamePatient(userEntityPatient.getFirstName() + " " + userEntityPatient.getLastName());
             appointmentDtos.add(appointmentDto);
         }
 
@@ -97,27 +106,34 @@ public class AppointmentController {
     public List<AppointmentDto> getOwnAppointments() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
+        UserEntity userEntityPatient = userRepository.findByUsername(name);
 
-        List<AppointmentEntity> appointmentEntities = appointmentRepository.findByUsernamePatient(name);
+        List<AppointmentEntity> appointmentEntities = appointmentRepository.findByPatientId(userEntityPatient.getUid().toString());
         List<AppointmentDto> appointmentDtos = new ArrayList<>();
 
         for(AppointmentEntity appointmentEntity : appointmentEntities) {
             AppointmentDto appointmentDto = new AppointmentDto();
             appointmentDto.setId(appointmentEntity.getUid());
             appointmentDto.setAccepted(appointmentEntity.isAccepted());
-            appointmentDto.setUsernamePatient(appointmentEntity.getUsernamePatient());
-            appointmentDto.setUsernameDoctor(appointmentEntity.getUsernameDoctor());
+
+            UserEntity userEntityDoctor = null;
+            if(appointmentEntity.getDoctorId() != null) {
+                userEntityDoctor = userRepository.getById(UUID.fromString(appointmentEntity.getDoctorId()));
+                appointmentDto.setUsernameDoctor(userEntityDoctor.getUsername());
+                appointmentDto.setFullnameDoctor(userEntityPatient.getFirstName() + " " + userEntityPatient.getLastName());
+
+            }
+
+            appointmentDto.setUsernamePatient(userEntityPatient.getUsername());
             appointmentDto.setLocation(appointmentEntity.getLocation());
             appointmentDto.setDate(appointmentEntity.getDate().format(formatter));
             appointmentDto.setDescription(appointmentEntity.getDescription());
-            UserEntity fullnameDoctor = userRepository.findByUsername(appointmentEntity.getUsernameDoctor());
 
-            if(fullnameDoctor != null) {
-                appointmentDto.setFullnameDoctor(fullnameDoctor.getFirstName() + " " + fullnameDoctor.getLastName());
+            if(userEntityDoctor != null) {
+                appointmentDto.setFullnameDoctor(userEntityDoctor.getFirstName() + " " + userEntityDoctor.getLastName());
             }
 
-            UserEntity fullnamePatient = userRepository.findByUsername(appointmentEntity.getUsernamePatient());
-            appointmentDto.setFullnameDoctor(fullnamePatient.getFirstName() + " " + fullnamePatient.getLastName());
+            appointmentDto.setFullnamePatient(userEntityPatient.getFirstName() + " " + userEntityPatient.getLastName());
             appointmentDtos.add(appointmentDto);
         }
 
@@ -139,7 +155,9 @@ public class AppointmentController {
     @PostMapping("/appointment-accept")
     public void acceptAppoitment(@RequestBody AppointmentDto appointmentDto) {
         LocalDateTime dateTime = LocalDateTime.parse(appointmentDto.getDate(), formatter);
-        appointmentRepository.setAccepted(appointmentDto.getUsernamePatient(), dateTime);
+        UserEntity userEntity = userRepository.findByUsername(appointmentDto.getUsernamePatient());
+
+        appointmentRepository.setAcceptedForPatient(userEntity.getUid().toString(), dateTime);
     }
 
     @GetMapping("/active-modules")
