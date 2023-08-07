@@ -21,6 +21,52 @@
 
       }
 
+      function getCurrentRole() {
+        var url = "http://localhost:8080/api/current-role"
+        fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                  console.log("1: ", data);
+                    if(data == "DOCTOR") {
+                      console.log("2");
+                      document.getElementById("administration").style.display = "";
+                    }
+                  })
+      }
+
+      function addDoctor() {
+        const firstName = document.getElementById("doctorFirstName").value;
+        const username = document.getElementById("doctorUsername").value;
+        const lastName = document.getElementById("doctorLastName").value;
+        const password = document.getElementById("doctorPassword").value;
+        const mail = document.getElementById("birthdate").mail;
+        const birthdate = document.getElementById("birthdate").value;
+
+        const newDoctor = {
+          "firstName": firstName,
+          "lastName": lastName,
+          "username": username,
+          "password": password,
+          "birthdate":birthdate,
+          "mail":mail
+        }
+
+        fetch('http://localhost:8080/api/doctor-save/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+          },
+          body: JSON.stringify(newDoctor)
+        })
+                .then(response => {
+                  console.log(response);
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+      }
+
       function getActiveModules() {
         var url = "http://localhost:8080/api/active-modules"
         fetch(url)
@@ -73,11 +119,24 @@
                 })
       }
 
+      function getCookie(name) {
+        const cookieValue = document.cookie
+                .split(';')
+                .map(cookie => cookie.trim())
+                .find(cookie => cookie.startsWith(`${name}=`));
+
+        if (!cookieValue) {
+          return null;
+        }
+
+        return cookieValue.substring(name.length + 1);
+      }
+
 
     </script>
 
   </head>
-  <body onload="javascript:getCurrentName(), getActiveModules()">
+  <body onload="javascript:getCurrentName(), getActiveModules(), getCurrentRole()">
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -114,7 +173,23 @@
   </nav>
 
     <div layout:fragment="content" style="margin-top: 50px; margin-left: 20px">
-    <h1>Guten Tag! Bitte werfen Sie ein Blick auf unsere Services, aufrufbar in der Navigation!</h1>
-  </div>
+        <h1>Guten Tag! Bitte werfen Sie ein Blick auf unsere Services, aufrufbar in der Navigation!</h1>
+    </div>
+
+    <div id="administration" style="display: none">
+      <div layout:fragment="content" style="margin-top: 50px; margin-left: 20px;">
+        <h3>Administration</h3>
+        <p>In diesem Bereich können Sie neues medizinisches Personal hinzufügen</p>
+          Username: <input type="text" id="doctorUsername"><br>
+          Vorname: <input type="text" id="doctorFirstName"><br>
+          Nachname: <input type="text" id="doctorLastName"><br>
+          Passwort: <input type="password" id="doctorPassword"><br>
+          Geburtsdatum: <input type="date" id="birthdate"/><br>
+          Email: <input type="date" id="mail"/><br>
+        <button class="btn btn-primary" onclick="addDoctor()"></button>
+
+      </div>
+    </div>
+
   </body>
 </html>

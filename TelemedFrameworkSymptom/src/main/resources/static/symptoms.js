@@ -49,7 +49,6 @@ function getCurrentRole() {
     fetch(url)
         .then(response => response.text())
         .then(data => {
-            console.log(data);
             if(data == "PATIENT") {
                 document.getElementById("doctorDiv").style.visibility = "hidden";
                 document.getElementById("doctorAdd").style.display = "none";
@@ -59,7 +58,6 @@ function getCurrentRole() {
             }
 
             if(data == "DOCTOR") {
-                console.log("hier");
                 document.getElementById("symptoms").style.display = "none";
                 document.getElementById("clientAdd").style.display = "none";
                 document.getElementById("clientSave").style.display = "none";
