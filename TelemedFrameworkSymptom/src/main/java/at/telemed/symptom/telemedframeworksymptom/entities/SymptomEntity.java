@@ -3,6 +3,7 @@ package at.telemed.symptom.telemedframeworksymptom.entities;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +19,10 @@ public class SymptomEntity {
     private String userId;
 
     private String symptom;
+
+    private boolean active;
+
+    private LocalDate created;
 
     private String description;
 
@@ -40,6 +45,24 @@ public class SymptomEntity {
     public String getUserId() {
         return userId;
     }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public LocalDate getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
+    }
+
+
 
     public void setUserId(String userId) {
         this.userId = userId;

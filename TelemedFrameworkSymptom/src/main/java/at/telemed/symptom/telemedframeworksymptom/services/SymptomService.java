@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -52,7 +53,7 @@ public class SymptomService {
 
                 for(var activeSymptom : activeSymptoms) {
                     if(symptomText.equals(activeSymptom.getSymptom())) {
-                        symptomDto.setActive(true);
+                        symptomDto.setActive(activeSymptom.isActive());
                         symptomDto.setDescription(activeSymptom.getDescription());
                     }
                 }
@@ -79,7 +80,7 @@ public class SymptomService {
             Symptom symptomDto = new Symptom();
             symptomDto.setSymptom(symptomEntity.getSymptom());
             symptomDto.setDescription(symptomEntity.getDescription());
-            symptomDto.setActive(true);
+            symptomDto.setActive(symptomEntity.isActive());
             extraSymptomsDto.add(symptomDto);
         }
 
@@ -88,17 +89,34 @@ public class SymptomService {
 
     public void saveSyptomList(List<Symptom> symptoms, String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
-
+        var activeSymptoms = symptomRepository.findByUserId(userEntity.getUid().toString());
         symptomRepository.deleteByUserId(userEntity.getUid().toString());
+
         for(Symptom symptom : symptoms) {
-            if(symptom.isActive()) {
+            boolean found = false;
+            for(SymptomEntity symptomEntity : activeSymptoms) {
+                if(!found && symptom.getSymptom().equals(symptomEntity.getSymptom())) {
+                    found = true;
+                    SymptomEntity newSymptom = new SymptomEntity();
+                    newSymptom.setSymptom(symptom.getSymptom());
+                    newSymptom.setUserId(userEntity.getUid().toString());
+                    newSymptom.setDescription(symptom.getDescription());
+                    newSymptom.setActive(symptom.isActive());
+                    newSymptom.setCreated(symptomEntity.getCreated());
+                    symptomRepository.save(newSymptom);
+                }
+            }
+
+            if(!found && symptom.isActive()) {
                 SymptomEntity symptomEntity = new SymptomEntity();
                 symptomEntity.setSymptom(symptom.getSymptom());
                 symptomEntity.setUserId(userEntity.getUid().toString());
                 symptomEntity.setDescription(symptom.getDescription());
-
+                symptomEntity.setActive(symptom.isActive());
+                symptomEntity.setCreated(LocalDate.now());
                 symptomRepository.save(symptomEntity);
             }
+
         }
     }
 
@@ -112,7 +130,7 @@ public class SymptomService {
             Symptom symptomDto = new Symptom();
             symptomDto.setSymptom(symptomEntity.getSymptom());
             symptomDto.setDescription(symptomEntity.getDescription());
-            symptomDto.setActive(true);
+            symptomDto.setActive(symptomEntity.isActive());
             symptoms.add(symptomDto);
         }
 
