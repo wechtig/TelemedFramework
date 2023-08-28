@@ -22,7 +22,8 @@ public class SymptomEntity {
 
     private boolean active;
 
-    private LocalDate created;
+    @Column(name = "create_date")
+    private LocalDate createDate;
 
     private String description;
 
@@ -54,15 +55,13 @@ public class SymptomEntity {
         this.active = active;
     }
 
-    public LocalDate getCreated() {
-        return created;
+    public LocalDate getCreateDate() {
+        return createDate;
     }
 
-    public void setCreated(LocalDate created) {
-        this.created = created;
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
     }
-
-
 
     public void setUserId(String userId) {
         this.userId = userId;

@@ -102,7 +102,7 @@ public class SymptomService {
                     newSymptom.setUserId(userEntity.getUid().toString());
                     newSymptom.setDescription(symptom.getDescription());
                     newSymptom.setActive(symptom.isActive());
-                    newSymptom.setCreated(symptomEntity.getCreated());
+                    newSymptom.setCreateDate(symptomEntity.getCreateDate());
                     symptomRepository.save(newSymptom);
                 }
             }
@@ -113,7 +113,7 @@ public class SymptomService {
                 symptomEntity.setUserId(userEntity.getUid().toString());
                 symptomEntity.setDescription(symptom.getDescription());
                 symptomEntity.setActive(symptom.isActive());
-                symptomEntity.setCreated(LocalDate.now());
+                symptomEntity.setCreateDate(LocalDate.now());
                 symptomRepository.save(symptomEntity);
             }
 

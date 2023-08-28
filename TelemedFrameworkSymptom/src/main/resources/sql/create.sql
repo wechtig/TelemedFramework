@@ -4,6 +4,6 @@ create table telemed_symptom
     user_id     varchar(80),
     symptom     varchar(100),
     active      boolean,
-    created     date,
+    create_date     date,
     description varchar(256)
 )
