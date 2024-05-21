@@ -5,7 +5,7 @@ Um das Framework zu starten gibt es zwei Möglichkeiten:
 Man verwendet den Initializer und generiert damit die SQL Skripte, Jar Files, das Logo Bild und das Property File. Dannach muss man die Datenbank erstellen und alle Files in einen Ordner geben. 
 Das Ganze kann gestartet werden mit "java -jar KOMPONENTENNAME". Die gewünschten Komponenten müssen einzeln gestartet werden.
 
-1.1 Startn des Initializers ohne Entwicklungsumgebung
+1.1 Starten des Initializers ohne Entwicklungsumgebung
 Der Initalizer braucht folgende Ordner: 
 - Config: Mit den application.properties, beinhalten aber nur das Port
 - Files: SQL Skripte (in der Initializerkomponente oder einzeln in den anderen)
