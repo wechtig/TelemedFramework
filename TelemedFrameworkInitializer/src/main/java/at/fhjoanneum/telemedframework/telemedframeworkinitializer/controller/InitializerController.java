@@ -33,7 +33,7 @@ public class InitializerController {
             }
             if(downloadDtod.isCommunication()) {
                 addToZip("modules/communication.jar", zipOut);
-                addToZip("files/createcommunication.sql", zipOut);
+                //addToZip("files/createcommunication.sql", zipOut);
                 propertyFile += "COMMUNICATION-";
             }
             if(downloadDtod.isCourse()) {
